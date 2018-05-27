@@ -1461,6 +1461,8 @@ namespace ts {
                 return undefined;
             }
 
+            allDecorators.decorators = (allDecorators.decorators as ReadonlyArray<Decorator>).filter((decorator) => !decorator.isAmbient);
+
             const decoratorExpressions: Expression[] = [];
             addRange(decoratorExpressions, map(allDecorators.decorators, transformDecorator));
             addRange(decoratorExpressions, flatMap(allDecorators.parameters, transformDecoratorsOfParameter));
@@ -1514,7 +1516,7 @@ namespace ts {
         function generateClassElementDecorationExpression(node: ClassExpression | ClassDeclaration, member: ClassElement) {
             const allDecorators = getAllDecoratorsOfClassElement(node, member);
             const decoratorExpressions = transformAllDecoratorsOfDeclaration(member, node, allDecorators);
-            if (!decoratorExpressions) {
+            if (!decoratorExpressions || decoratorExpressions.length === 0) {
                 return undefined;
             }
 

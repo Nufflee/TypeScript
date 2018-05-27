@@ -3226,6 +3226,7 @@ namespace ts {
                 token() !== SyntaxKind.FunctionKeyword &&
                 token() !== SyntaxKind.ClassKeyword &&
                 token() !== SyntaxKind.AtToken &&
+                token() !== SyntaxKind.AtAtToken &&
                 isStartOfExpression();
         }
 
@@ -5628,7 +5629,7 @@ namespace ts {
         function isClassMemberStart(): boolean {
             let idToken: SyntaxKind | undefined;
 
-            if (token() === SyntaxKind.AtToken) {
+            if (token() === SyntaxKind.AtToken || token() === SyntaxKind.AtAtToken) {
                 return true;
             }
 
@@ -5699,11 +5700,13 @@ namespace ts {
             const listPos = getNodePos();
             while (true) {
                 const decoratorStart = getNodePos();
-                if (!parseOptional(SyntaxKind.AtToken)) {
+                const isAtAtToken = parseOptional(SyntaxKind.AtAtToken);
+                if (!isAtAtToken && !parseOptional(SyntaxKind.AtToken)) {
                     break;
                 }
                 const decorator = <Decorator>createNode(SyntaxKind.Decorator, decoratorStart);
                 decorator.expression = doInDecoratorContext(parseLeftHandSideExpressionOrHigher);
+                decorator.isAmbient = isAtAtToken;
                 finishNode(decorator);
                 (list || (list = [])).push(decorator);
             }

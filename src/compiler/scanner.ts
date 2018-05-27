@@ -186,6 +186,7 @@ namespace ts {
         "|=": SyntaxKind.BarEqualsToken,
         "^=": SyntaxKind.CaretEqualsToken,
         "@": SyntaxKind.AtToken,
+        "@@": SyntaxKind.AtAtToken
     });
 
     /*
@@ -1711,6 +1712,13 @@ namespace ts {
                         return token = SyntaxKind.TildeToken;
                     case CharacterCodes.at:
                         pos++;
+
+                        if (text.charCodeAt(pos) === CharacterCodes.at) {
+                            pos++;
+
+                            return token = SyntaxKind.AtAtToken;
+                        }
+
                         return token = SyntaxKind.AtToken;
                     case CharacterCodes.backslash:
                         const cookedChar = peekUnicodeEscape();

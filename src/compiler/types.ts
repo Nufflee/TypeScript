@@ -152,6 +152,7 @@ namespace ts {
         QuestionToken,
         ColonToken,
         AtToken,
+        AtAtToken,
         // Assignments
         EqualsToken,
         PlusEqualsToken,
@@ -796,6 +797,7 @@ namespace ts {
         kind: SyntaxKind.Decorator;
         parent: NamedDeclaration;
         expression: LeftHandSideExpression;
+        isAmbient: boolean;
     }
 
     export interface TypeParameterDeclaration extends NamedDeclaration {
